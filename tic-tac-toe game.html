@@ -1,0 +1,140 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>
+		no game!
+	</title>
+	<script>
+		function pobeda(kto){var s = document.createElement('H1'); document.body.appendChild(s); ss = document.getElementsByTagName("H1")[0]; ss.innerText = "УРА, ПОБЕДИЛ "+kto+"!";
+		if(kto == "КОМПЬЮТЕР"){ss.setAttribute("id","red");}
+		}
+	//Этой функцией создаю поле для игры ---------------------------------
+		function makePlace(){
+			var battle = document.getElementById("battlePlace");
+			var tbl = document.createElement('table');
+			battle.appendChild(tbl);
+			var tbl = document.getElementsByTagName("TABLE")[0];
+			for (var i=0; i<3; i++){
+				var tr = document.createElement('tr');
+				tbl.appendChild(tr);
+				tr = document.getElementsByTagName("TR")[i];
+				for (var s=0; s<3; s++){
+					var td = document.createElement('td');
+					tr.appendChild(td);	
+				}	
+			}
+	 		//каждой ячейке присваиваеться свой идентификаторов от 0 до 9 и атрибут onclick
+			for (var i=0; i<10;i++){
+				var td = document.getElementsByTagName("TD")[i];
+				td.setAttribute("id",i);
+				td.setAttribute("onclick","move("+i+")");
+			}
+		}
+	//---------------------------------------------------------------------		
+	
+	//функция создает массив в котор помещает текущее состояние на поле
+		function checkWho(){	
+			var manResult = new Array;
+			var tds = document.getElementsByTagName("TD");
+			for(var i=0; i<tds.length;i++){
+				manResult.push(tds[i].innerHTML);
+			}
+			var s = manResult;
+			if(s[0]=="X"&&s[1]=="X"&&s[2]=="X"){pobeda("ИГРОК"); return;}
+			if(s[3]=="X"&&s[4]=="X"&&s[5]=="X"){pobeda("ИГРОК"); return;}
+			if(s[6]=="X"&&s[7]=="X"&&s[8]=="X"){pobeda("ИГРОК"); return;}
+			if(s[0]=="X"&&s[3]=="X"&&s[6]=="X"){pobeda("ИГРОК"); return;}
+			if(s[1]=="X"&&s[4]=="X"&&s[7]=="X"){pobeda("ИГРОК"); return;}
+			if(s[2]=="X"&&s[5]=="X"&&s[8]=="X"){pobeda("ИГРОК"); return;}
+			if(s[0]=="X"&&s[4]=="X"&&s[8]=="X"){pobeda("ИГРОК"); return;}
+			if(s[2]=="X"&&s[4]=="X"&&s[6]=="X"){pobeda("ИГРОК"); return;}
+			
+			if(s[0]=="O"&&s[1]=="O"&&s[2]=="O"){pobeda("КОМПЬЮТЕР"); return;}
+			if(s[3]=="O"&&s[4]=="O"&&s[5]=="O"){pobeda("КОМПЬЮТЕР"); return;}
+			if(s[6]=="O"&&s[7]=="O"&&s[8]=="O"){pobeda("КОМПЬЮТЕР"); return;}
+			if(s[0]=="O"&&s[3]=="O"&&s[6]=="O"){pobeda("КОМПЬЮТЕР"); return;}
+			if(s[1]=="O"&&s[4]=="O"&&s[7]=="O"){pobeda("КОМПЬЮТЕР"); return;}
+			if(s[2]=="O"&&s[5]=="O"&&s[8]=="O"){pobeda("КОМПЬЮТЕР"); return;}
+			if(s[0]=="O"&&s[4]=="O"&&s[8]=="O"){pobeda("КОМПЬЮТЕР"); return;}
+			if(s[2]=="O"&&s[4]=="O"&&s[6]=="O"){pobeda("КОМПЬЮТЕР"); return;}
+			return (manResult);
+		}
+	
+	// Ход который выполняет компьютер----------------------------------------------- 
+		function compMove(hod,a){
+			
+			//(1) делаем ПЕРВЫЙ ход случаным, но так что бы не совпал с уже сделаннам
+			if(hod == 1){
+				var b = Math.floor(Math.random()*8);
+				if(b == a) {b = b + 1}; // проверяем не занято ли поле после первого хода
+				var td = document.getElementsByTagName("TD")[b];
+			}
+			else{
+				var s = checkWho();	
+					if((s[1]=="X"&&s[2]=="X") || (s[3]=="X"&&s[6]=="X") || (s[4]=="X"&&s[8]=="X") && !(s[0]=="X" || s[0]=="O")){
+						var b = 0;
+					}
+					if((s[0]=="X"&&s[2]=="X") || (s[4]=="X"&&s[7]=="X") && !(s[1]=="X" || s[1]=="O")){
+						var b = 1;
+					}
+					if((s[0]=="X"&&s[1]=="X") || (s[4]=="X"&&s[6]=="X") || (s[5]=="X"&&s[8]=="X") && !(s[2]=="X" || s[2]=="O")) 
+					{
+						var b = 2; 
+					}
+					if((s[0]=="X"&&s[6]=="X") || (s[4]=="X"&&s[5]=="X") && !(s[3]=="X" || s[3]=="O")){
+						var b = 3;
+					}
+					if((s[0]=="X"&&s[8]=="X") || (s[2]=="X"&&s[6]=="X") || (s[1]=="X"&&s[7]=="X") || (s[3]=="X"&&s[5]=="X") && !(s[4]=="X" || s[4]=="O")) 
+					{
+						var b = 4; 
+					}
+					if((s[2]=="X"&&s[8]=="X") || (s[3]=="X"&&s[4]=="X") && !(s[5]=="X" || s[5]=="O")){
+						var b = 5;
+					}
+				
+					if((s[0]=="X"&&s[3]=="X") || (s[2]=="X"&&s[4]=="X") || (s[7]=="X"&&s[8]=="X") && !(s[6]=="X" || s[6]=="O")) {
+						var b = 6; 
+					}
+					if((s[6]=="X"&&s[8]=="X") || (s[1]=="X"&&s[4]=="X") && !(s[7]=="X" || s[7]=="O")){
+						var b = 7;
+					}
+					if((s[2]=="X"&&s[5]=="X") || (s[6]=="X"&&s[7]=="X") || (s[0]=="X"&&s[4]=="X") && !(s[8]=="X" || s[8]=="O")) {
+						var b = 8; 
+					} else {var b = 4}
+				var td = document.getElementsByTagName("TD")[b];
+			}
+			if (td.innerHTML == ""){td.innerHTML="O";} else {compMove(true)} 
+			var situacija = checkWho();	
+			//console.log(situacija);
+		}
+
+		var hod = 0; // глобальная переменная, считает ходы человека
+		function move(a){
+			var td = document.getElementsByTagName("TD")[a];
+			if (td.innerHTML == "")td.innerHTML="X"; else return; // проверка, не занято ли поле
+			hod = hod + 1;
+			var situacija = checkWho();	
+			//console.log(situacija);
+			if(hod < 5 ){
+			compMove(hod,a);}
+			else return;
+		}
+
+	
+	</script>
+	<style>
+		#battlePlace{margin-top: 100px}
+		table{margin:auto; }
+		td{width:100px;height:100px;border:solid black 2px;  font-size: 70px; text-align: center; font-family: Arial}
+		td:hover{background:#dfdfdf;}
+		h1{background:green; color:white;position:fixed; top:100px; left:400px}
+		h1#red{background:red}
+	</style>
+</head>
+<body onload="makePlace()">
+	<div id="battlePlace"></div>
+	<a href="https://plus.google.com/116404868405790167340?rel=author" style="text-decoration:none; color: gold; position: fixed;bottom:0;left:0;text-shadow:1px 1px 1px #aaa; font-family: Comic Sans MS">>>MadeByAB<<</a>
+</body>
+</html>
