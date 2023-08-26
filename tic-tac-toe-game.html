@@ -63,64 +63,47 @@
 		}
 	
 	// Ход который выполняет компьютер----------------------------------------------- 
-		function compMove(hod,a){
-			
-			//(1) делаем ПЕРВЫЙ ход случаным, но так что бы не совпал с уже сделаннам
-			if(hod == 1){
-				var b = Math.floor(Math.random()*8);
-				if(b == a) {b = b + 1}; // проверяем не занято ли поле после первого хода
-				var td = document.getElementsByTagName("TD")[b];
-			}
-			else{
-				var s = checkWho();	
-					if((s[1]=="X"&&s[2]=="X") || (s[3]=="X"&&s[6]=="X") || (s[4]=="X"&&s[8]=="X") && !(s[0]=="X" || s[0]=="O")){
-						var b = 0;
-					}
-					if((s[0]=="X"&&s[2]=="X") || (s[4]=="X"&&s[7]=="X") && !(s[1]=="X" || s[1]=="O")){
-						var b = 1;
-					}
-					if((s[0]=="X"&&s[1]=="X") || (s[4]=="X"&&s[6]=="X") || (s[5]=="X"&&s[8]=="X") && !(s[2]=="X" || s[2]=="O")) 
-					{
-						var b = 2; 
-					}
-					if((s[0]=="X"&&s[6]=="X") || (s[4]=="X"&&s[5]=="X") && !(s[3]=="X" || s[3]=="O")){
-						var b = 3;
-					}
-					if((s[0]=="X"&&s[8]=="X") || (s[2]=="X"&&s[6]=="X") || (s[1]=="X"&&s[7]=="X") || (s[3]=="X"&&s[5]=="X") && !(s[4]=="X" || s[4]=="O")) 
-					{
-						var b = 4; 
-					}
-					if((s[2]=="X"&&s[8]=="X") || (s[3]=="X"&&s[4]=="X") && !(s[5]=="X" || s[5]=="O")){
-						var b = 5;
-					}
-				
-					if((s[0]=="X"&&s[3]=="X") || (s[2]=="X"&&s[4]=="X") || (s[7]=="X"&&s[8]=="X") && !(s[6]=="X" || s[6]=="O")) {
-						var b = 6; 
-					}
-					if((s[6]=="X"&&s[8]=="X") || (s[1]=="X"&&s[4]=="X") && !(s[7]=="X" || s[7]=="O")){
-						var b = 7;
-					}
-					if((s[2]=="X"&&s[5]=="X") || (s[6]=="X"&&s[7]=="X") || (s[0]=="X"&&s[4]=="X") && !(s[8]=="X" || s[8]=="O")) {
-						var b = 8; 
-					} else {var b = 4}
-				var td = document.getElementsByTagName("TD")[b];
-			}
-			if (td.innerHTML == ""){td.innerHTML="O";} else {compMove(true)} 
-			var situacija = checkWho();	
-			//console.log(situacija);
-		}
+		function compMove(hod, a) {
+    var s = checkWho();
+    
+    // Check if there's a winning move for the computer
+    for (var i = 0; i < s.length; i++) {
+        if (s[i] === "") {
+            s[i] = "O"; // Simulate computer's move
+            if (checkWin(s, "O")) {
+                document.getElementsByTagName("TD")[i].innerHTML = "O"; // Make the winning move
+                return;
+            }
+            s[i] = ""; // Revert simulation
+        }
+    }
+    
+    // Check if there's a winning move for the player and block it
+    for (var i = 0; i < s.length; i++) {
+        if (s[i] === "") {
+            s[i] = "X"; // Simulate player's move
+            if (checkWin(s, "X")) {
+                document.getElementsByTagName("TD")[i].innerHTML = "O"; // Block the player's winning move
+                return;
+            }
+            s[i] = ""; // Revert simulation
+        }
+    }
+    
+    // If no winning moves, choose an available spot
+    for (var i = 0; i < s.length; i++) {
+        if (s[i] === "") {
+            document.getElementsByTagName("TD")[i].innerHTML = "O"; // Make a move
+            return;
+        }
+    }
+}
 
-		var hod = 0; // глобальная переменная, считает ходы человека
-		function move(a){
-			var td = document.getElementsByTagName("TD")[a];
-			if (td.innerHTML == "")td.innerHTML="X"; else return; // проверка, не занято ли поле
-			hod = hod + 1;
-			var situacija = checkWho();	
-			//console.log(situacija);
-			if(hod < 5 ){
-			compMove(hod,a);}
-			else return;
-		}
+// Function to check if the specified player has won
+function checkWin(board, player) {
+    // ... your checkWin logic ...
+    // Return true if the player has won, otherwise return false
+}
 
 	
 	</script>
