@@ -37,14 +37,32 @@
 
         function handleClick(e) {
             const index = parseInt(e.target.dataset.index);
-            if (cells[index] || checkWinner()) return;
-            cells[index] = currentPlayer;
-            e.target.textContent = currentPlayer;
-            const winner = checkWinner();
+            if (cells[index] || checkWinner() || currentPlayer !== 'X') return;
+            cells[index] = 'X';
+            e.target.textContent = 'X';
+            let winner = checkWinner();
             if (winner) {
                 message.textContent = winner === 'draw' ? 'Ничья!' : `Победил ${winner}!`;
             } else {
-                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                currentPlayer = 'O';
+                message.textContent = 'Ходит O (робот)';
+                setTimeout(robotMove, 500);
+            }
+        }
+
+        function robotMove() {
+            if (checkWinner()) return;
+            const empty = cells.map((cell, i) => cell ? null : i).filter(i => i !== null);
+            if (empty.length === 0) return;
+            const index = empty[Math.floor(Math.random() * empty.length)];
+            cells[index] = 'O';
+            const cell = board.querySelector(`[data-index="${index}"]`);
+            cell.textContent = 'O';
+            let winner = checkWinner();
+            if (winner) {
+                message.textContent = winner === 'draw' ? 'Ничья!' : `Победил ${winner}!`;
+            } else {
+                currentPlayer = 'X';
                 message.textContent = `Ходит ${currentPlayer}`;
             }
         }
